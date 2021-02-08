@@ -1128,9 +1128,6 @@ static char *construct_querystring(t_client *client, char *originurl, char *quer
 			}
 
 	} else if (config->fas_secure_enabled == 2 || config->fas_secure_enabled == 3) {
-		hash_str(hash, sizeof(hash), client->token);
-		debug(LOG_DEBUG, "hid=%s", hash);
-
 		get_client_interface(clientif, sizeof(clientif), client->mac);
 		debug(LOG_INFO, "clientif: [%s]", clientif);
 		snprintf(querystr, QUERYMAXLEN,
@@ -1139,7 +1136,7 @@ static char *construct_querystring(t_client *client, char *originurl, char *quer
 			client->mac, QUERYSEPARATOR,
 			config->url_encoded_gw_name, QUERYSEPARATOR,
 			VERSION, QUERYSEPARATOR,
-			hash, QUERYSEPARATOR,
+			client->token, QUERYSEPARATOR,
 			config->gw_address, QUERYSEPARATOR,
 			config->gw_mac, QUERYSEPARATOR,
 			config->authdir, QUERYSEPARATOR,
