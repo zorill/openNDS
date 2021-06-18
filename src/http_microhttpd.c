@@ -673,9 +673,9 @@ static int authenticated(struct MHD_Connection *connection,
 
 	ret = MHD_get_connection_values(connection, MHD_HEADER_KIND, get_host_value_callback, &host);
 
-	if (ret < 1) {
+	if (ret < 1 || host == NULL) {
 		debug(LOG_ERR, "authenticated: Error getting host");
-		return ret;
+        return send_error(connection, 503);
 	} else {
 		debug(LOG_INFO, "An authenticated client is requesting: host [%s] url [%s]", host, url);
 	}
@@ -854,9 +854,9 @@ static int preauthenticated(struct MHD_Connection *connection,
 
 	ret = MHD_get_connection_values(connection, MHD_HEADER_KIND, get_host_value_callback, &host);
 
-	if (ret < 1) {
+	if (ret < 1 || host == NULL) {
 		debug(LOG_ERR, "preauthenticated: Error getting host");
-		return ret;
+		return send_error(connection, 503);
 	}
 
 	debug(LOG_DEBUG, "preauthenticated: host [%s] url [%s]", host, url);
